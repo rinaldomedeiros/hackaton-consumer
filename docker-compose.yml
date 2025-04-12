@@ -1,12 +1,12 @@
 services:
   myapp:
     build: .
-    container_name: producer
+    container_name: consumer
     ports:
-      - "8080:8080"
-    depends_on:
-      postgres:
-        condition: service_healthy
+      - "8081:8080"
+#    depends_on:
+#      postgres:
+#        condition: service_healthy
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://producer_db:5432/hackaton
       - SPRING_DATASOURCE_USERNAME=user
@@ -16,28 +16,27 @@ services:
       - /home/eavila/hackaton/videos/output:/home/hackaton/videos/output
     networks:
       - hackaton_net
-
   
-  postgres:
-    image: postgres:16.2
-    restart: always
-    container_name: producer_db
-    environment:
-      POSTGRES_DB: hackaton
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-    ports:
-      - "5435:5432"
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
-    networks:
-      - hackaton_net
+#  postgres:
+#    image: postgres:16.2
+#    restart: always
+#    container_name: producer_db
+#    environment:
+#      POSTGRES_DB: hackaton
+#      POSTGRES_USER: user
+#      POSTGRES_PASSWORD: password
+#    ports:
+#      - "5435:5432"
+#    volumes:
+#      - pgdata:/var/lib/postgresql/data
+#    healthcheck:
+#      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
+#      interval: 30s
+#      timeout: 10s
+#      retries: 3
+#      start_period: 30s
+#    networks:
+#      - hackaton_net
 
 networks:
   hackaton_net:

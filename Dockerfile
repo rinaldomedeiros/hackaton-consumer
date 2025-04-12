@@ -7,13 +7,13 @@ RUN apt-get update && apt-get install -y ffmpeg
 VOLUME /tmp
 
 # Define o nome do JAR gerado pelo Maven
-ARG JAR_FILE=target/producer-0.0.1-SNAPSHOT.jar
+ARG JAR_FILE=target/consumer-0.0.1-SNAPSHOT.jar
 
 # Copia o JAR para a imagem com o nome app.jar
 COPY ${JAR_FILE} app.jar
 
 # Expõe a porta 8080
-EXPOSE 8080
+EXPOSE 8081
 
 # Comando para executar a aplicação
-ENTRYPOINT ["java", "-Dspring.profiles.active=docker", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar", "--spring.profiles.active=docker"]

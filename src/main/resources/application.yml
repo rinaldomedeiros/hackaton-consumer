@@ -1,7 +1,7 @@
 server:
-  port: 8080
+  port: 8081
   servlet:
-    contextPath: /producer
+    contextPath: /consumer
 
 spring:
   profiles:
@@ -24,11 +24,6 @@ spring:
     ansi:
       enabled: ALWAYS
 
-  servlet:
-    multipart:
-      max-file-size: 100MB
-      max-request-size: 100MB
-      
   jpa:
     hibernate:
       ddl-auto: update
