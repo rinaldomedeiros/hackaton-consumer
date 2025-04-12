@@ -1,0 +1,58 @@
+server:
+  port: 8080
+  servlet:
+    contextPath: /producer
+
+spring:
+  profiles:
+    active: dev
+  kafka:
+    consumer:
+      group-id: video-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    topic:
+      kafka-topic: video-process-topic
+      partitions: 5
+      replication-factor: 1
+
+  output:
+    ansi:
+      enabled: ALWAYS
+
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+      
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      connection-timeout: 30000
+      idle-timeout: 300000
+      max-lifetime: 1800000
+
+app:
+  video.input.path: /home/hackaton/videos/input
+  video.output.path: /home/hackaton/videos/output
+
+logging:
+  level:
+    root: INFO
+    org.apache.kafka: INFO
+    org.springframework.kafka: INFO
+

@@ -1,0 +1,12 @@
+spring:
+  kafka:
+    bootstrap-servers: 172.22.0.4:9092
+
+  datasource:
+    url: jdbc:postgresql://localhost:5435/hackaton
+    username: user
+    password: password
+
+app:
+  video.input.path: /home/eavila/hackaton/videos/input
+  video.output.path: /home/eavila/hackaton/videos/output
