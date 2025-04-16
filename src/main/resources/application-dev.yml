@@ -1,6 +1,10 @@
 spring:
   kafka:
-    bootstrap-servers: 172.22.0.4:9092
+    bootstrap-servers: 172.20.0.3:9092
+
+  data:
+    redis:
+      host: 172.18.0.2
 
   datasource:
     url: jdbc:postgresql://localhost:5435/hackaton

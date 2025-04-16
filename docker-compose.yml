@@ -4,9 +4,9 @@ services:
     container_name: consumer
     ports:
       - "8081:8080"
-#    depends_on:
-#      postgres:
-#        condition: service_healthy
+    depends_on:
+      redis:
+        condition: service_healthy
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://producer_db:5432/hackaton
       - SPRING_DATASOURCE_USERNAME=user
@@ -16,27 +16,23 @@ services:
       - /home/eavila/hackaton/videos/output:/home/hackaton/videos/output
     networks:
       - hackaton_net
-  
-#  postgres:
-#    image: postgres:16.2
-#    restart: always
-#    container_name: producer_db
-#    environment:
-#      POSTGRES_DB: hackaton
-#      POSTGRES_USER: user
-#      POSTGRES_PASSWORD: password
-#    ports:
-#      - "5435:5432"
-#    volumes:
-#      - pgdata:/var/lib/postgresql/data
-#    healthcheck:
-#      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
-#      interval: 30s
-#      timeout: 10s
-#      retries: 3
-#      start_period: 30s
-#    networks:
-#      - hackaton_net
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    environment:
+      - REDIS_PASSWORD=redis2025
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "redis2025", "ping | grep -q \"PONG\""]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+      start_period: 10s 
 
 networks:
   hackaton_net:
@@ -45,6 +41,7 @@ networks:
 
 volumes:
   pgdata:
+  redis_data:
 
 
 
