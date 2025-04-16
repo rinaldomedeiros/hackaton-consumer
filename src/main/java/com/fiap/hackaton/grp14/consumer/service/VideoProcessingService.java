@@ -28,8 +28,11 @@ public class VideoProcessingService {
 
     private final VideoService videoService;
 
-    public VideoProcessingService(VideoService videoService) {
+    private final RedisService redisService;
+
+    public VideoProcessingService(VideoService videoService, RedisService redisService) {
         this.videoService = videoService;
+        this.redisService = redisService;
     }
 
     public void processVideo(String videoPath, String videoId) {
@@ -66,6 +69,7 @@ public class VideoProcessingService {
 
             // Atualiza o status para COMPLETED após processamento bem-sucedido
             videoService.updateVideoStatus(videoId, VideoStatus.COMPLETED, zipFilePath);
+            redisService.addToHash("videos", videoId, zipFilePath);
 
             System.out.println("Processamento concluído e arquivo zip gerado: " + zipFilePath);
         } catch (Exception e) {
@@ -83,17 +87,28 @@ public class VideoProcessingService {
                 throw new IOException("Nenhum arquivo encontrado para compactar no diretório: " + folderPath);
             }
             for (File file : files) {
-                try (FileInputStream fis = new FileInputStream(file)) {
-                    ZipEntry zipEntry = new ZipEntry(file.getName());
-                    zos.putNextEntry(zipEntry);
-                    byte[] bytes = new byte[1024];
-                    int length;
-                    while ((length = fis.read(bytes)) >= 0) {
-                        zos.write(bytes, 0, length);
+                if (isFileValid(file)) {
+                    try (FileInputStream fis = new FileInputStream(file)) {
+                        ZipEntry zipEntry = new ZipEntry(file.getName());
+                        zos.putNextEntry(zipEntry);
+                        byte[] bytes = new byte[1024];
+                        int length;
+                        while ((length = fis.read(bytes)) >= 0) {
+                            zos.write(bytes, 0, length);
+                        }
                     }
                 }
             }
         }
+    }
+
+    private boolean isFileValid(File file) {
+        return !file.isDirectory()
+                && file.exists()
+                && file.canRead()
+                && file.length() > 0
+                && !file.isHidden()
+                && !file.getName().endsWith("zip");
     }
 }
 

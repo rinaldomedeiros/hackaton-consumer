@@ -31,7 +31,6 @@ public class KafkaVideoConsumer {
             videoProcessingService.processVideo(videoPath, videoId);
         } catch (Exception e) {
             log.error("Erro ao processar o vídeo com ID {}: {}", videoId, e.getMessage(), e);
-            // Relança a exceção para interromper o consumo da mensagem
             throw e;
         }
 
