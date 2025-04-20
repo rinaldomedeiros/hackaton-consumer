@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: 8080
   servlet:
     contextPath: /consumer
 
@@ -7,6 +7,7 @@ spring:
   profiles:
     active: dev
   kafka:
+    bootstrap-servers: kafka:9092
     consumer:
       group-id: video-group
       auto-offset-reset: earliest
@@ -51,6 +52,10 @@ spring:
 app:
   video.input.path: /home/hackaton/videos/input
   video.output.path: /home/hackaton/videos/output
+
+jwt:
+  secret: "z8kL7#pX$5vN@qR9!tB2mY4wG6jD1hF3eC5sJ7uK9xM0lO4iP8vQ2aZ5rT6yU"
+  expiration: 86400000
 
 logging:
   level:

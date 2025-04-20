@@ -1,7 +1,4 @@
 spring:
-  kafka:
-    bootstrap-servers: kafka:9092
-
   datasource:
     url: jdbc:postgresql://producer_db:5432/hackaton
     username: user

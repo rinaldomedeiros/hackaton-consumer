@@ -1,6 +1,8 @@
 package com.fiap.hackaton.grp14.consumer.controller;
 
 import com.fiap.hackaton.grp14.consumer.service.RedisService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.ServletContext;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +29,7 @@ import java.util.Set;
 @RestController
 @RequestMapping("/zip")
 @AllArgsConstructor
+@SecurityRequirement(name = "Bearer Authentication")
 public class ConsumerController {
 
     @Autowired
@@ -35,27 +38,32 @@ public class ConsumerController {
     private final RedisService redisService;
 
     @GetMapping()
+    @Operation(summary = "Este endpoint é responsável por listar todos os videos processados.")
     public ResponseEntity<Map<String, String>> getAllVideoEntries() {
         return ResponseEntity.ok(redisService.getAllVideoEntries());
     }
 
     @GetMapping("/paths")
+    @Operation(summary = "Este endpoint é responsável por listar os caminhos dos arquivos disponíveis para download.")
     public ResponseEntity<List<String>> getAllVideoPaths() {
         return ResponseEntity.ok(redisService.getAllPaths());
     }
 
     @GetMapping("/keys")
+    @Operation(summary = "Este endpoint é responsável por listar as chaves de todos os arquivos disponíveis para download")
     public ResponseEntity<Set<String>> getAllVideoKeys() {
         return ResponseEntity.ok(redisService.getSafeVideoKeys());
     }
 
     @GetMapping("/file")
+    @Operation(summary = "Este endpoint é responsável por listar o caminho de um vídeo específico")
     public ResponseEntity<String> getFilePath(@RequestParam("video-id") String videoId) {
         return ResponseEntity.ok(redisService.getValue(videoId));
     }
 
 
     @GetMapping("/download")
+    @Operation(summary = "Este endpoint é responsável por realizar o download de um arquivo")
     public ResponseEntity<InputStreamResource> downloadFile(@RequestParam("video-id") String videoId) {
         try {
             String filePath = redisService.getValue(videoId);
