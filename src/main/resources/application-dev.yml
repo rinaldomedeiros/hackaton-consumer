@@ -1,10 +1,10 @@
-spring:
-  kafka:
-    bootstrap-servers: 172.20.0.3:9092
+server:
+  port: 8081
 
+spring:
   data:
     redis:
-      host: 172.18.0.2
+      host: localhost
 
   datasource:
     url: jdbc:postgresql://localhost:5435/hackaton

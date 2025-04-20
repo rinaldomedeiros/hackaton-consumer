@@ -32,7 +32,9 @@ services:
       interval: 5s
       timeout: 3s
       retries: 3
-      start_period: 10s 
+      start_period: 10s
+    networks:
+      - hackaton_net
 
 networks:
   hackaton_net:
